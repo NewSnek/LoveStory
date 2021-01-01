@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LoveStory</title>
+  <link rel="stylesheet" href="../scss/style.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.2/TweenMax.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <embed src="../src/music.mp3" autostart="true" hidden="true" loop="false" style="visibility: hidden; display: block;">
+  </embed>
+  <div class="slide active">
+    <div class="card">
+      <div class="card-img" id="img01"></div>
+      <div class="card-content">
+        <p class="card-theme">8 Октября</p>
+        <h2 class="card-header">Наш первый день общения</h2>
+        <p class="card-para">В этот день, когда я тебе написал, это был день моих сомнений, насчёт отношений, и правильности выбора, 
+          но когда мы всё же решились погулять, и погуляли, я понял, 
+          что ты именно тот человек, которого я искал. И кроме тебе мне никто не нужен, несмотря на все наши ссоры, мы были вместе.
+        Я это безумно ценю.</p>
+      </div>
+    </div>
+  </div>
+  <div class="slide">
+    <div class="card">
+      <div class="card-img" id="img02"></div>
+      <div class="card-content">
+        <p class="card-theme">31 Октября</p>
+        <h2 class="card-header">Начало отношений</h2>
+        <p class="card-para">Вот настпупило моё день рождение, спасибо тебе за прекрасный подарок. Я был очень рад, ведь я так сильно хотел повербанк давно еще. 
+          Но еще больше я рад тому, что в этот день мы начали отношения. Самые родные и серьёзные которые у меня были. Я даже не поверил что за месяц можно ощутить что-то похожее на любовь. 
+          Но на втором я был уверен в своих чувствах.
+        </p>
+      </div>
+    </div>
+  </div>
+   <div class="slide">
+     <div class="card">
+       <div class="card-img" id="img03"></div>
+       <div class="card-content">
+         <p class="card-theme">31 Декабря</p>
+         <h2 class="card-header">Новый год</h2>
+         <p class="card-para">В этот новый год, я хотел бы пожелать любимому своему человеку, только лучших эмоций. Здоровья, терпения ну и конечно же не сомневаться в своих действиях. 
+           Я так тебя безумно люблю, моя дорогая Настя. Я тебя жду, очень жду, возвращайся. Мне хорошо только с тобой, и только с тобой я чувствую себя собой. 
+           Я надеюсь, что ты разберёшься со своими чувствами, и каков бы не был исход, я желаю тебе самого лучшего, моя
+           самая красивая и самая любимая &#10084;
+           <br>Надеюсь ты меня простишь.
+         </p>
+       </div>
+     </div>
+   </div>
+   <div class="prevnext">
+     <button class="pn-btn" id="prev"></button>
+     <button class="pn-btn" id="next"></button>
+   </div>
+   
+<script type="text/javascript">
+  var $activeSlide = $('.active'),
+    $homeSlide = $(".slide"),
+    $slideNavPrev = $("#prev"),
+    $slideNavNext = $("#next");
+
+  function init() {
+    TweenMax.set($homeSlide.not($activeSlide), {
+      autoAlpha: 0
+    });
+    TweenMax.set($slideNavPrev, {
+      autoAlpha: 0.2
+    });
+  }
+
+  init();
+
+  function goToNextSlide(slideOut, slideIn, slideInAll) {
+    var t1 = new TimelineLite(),
+      slideOutContent = slideOut.find('.card-content'),
+      slideInContent = slideIn.find('.card-content'),
+      slideOutImg = slideOut.find('.card-img'),
+      slideInImg = slideIn.find('.card-img'),
+      index = slideIn.index(),
+      size = $homeSlide.length;
+    console.log(index);
+
+    if (slideIn.length !== 0) {
+      t1
+        .set(slideIn, {
+          autoAlpha: 1,
+          className: '+=active'
+        })
+        .set(slideOut, {
+          className: '-=active'
+        })
+        .to(slideOutContent, 0.65, {
+          y: "+=40px",
+          ease: Power3.easeInOut
+        }, 0)
+        .to(slideOutImg, 0.65, {
+          ease: Power3.easeInOut
+        }, 0)
+        .to(slideInAll, 1, {
+          y: "-=100%",
+          ease: Power3.easeInOut
+        }, 0)
+        .fromTo(slideInContent, 0.65, {
+          y: '-=40px'
+        }, {
+          y: 0,
+          ease: Power3.easeInOut
+        }, "-=0.7")
+        .fromTo(slideInImg, 0.65, {
+          backgroundPosition: 'top'
+        }, {
+          ease: Power3.easeInOut
+        }, '-=0.7')
+    }
+
+    TweenMax.set($slideNavPrev, {
+      autoAlpha: 1
+    });
+
+
+    if (index === size) {
+      TweenMax.to($slideNavNext, 0.3, {
+        autoAlpha: 0.2,
+        ease: Linear.easeInOut
+      });
+    }
+
+
+  };
+
+  $slideNavNext.click(function (e) {
+    e.preventDefault();
+
+    var slideOut = $('.slide.active'),
+      slideIn = $('.slide.active').next('.slide'),
+      slideInAll = $('.slide');
+
+    goToNextSlide(slideOut, slideIn, slideInAll);
+
+  });
+
+  function goToPrevSlide(slideOut, slideIn, slideInAll) {
+    var t1 = new TimelineLite(),
+      slideOutContent = slideOut.find('.card-content'),
+      slideInContent = slideIn.find('.card-content'),
+      slideOutImg = slideOut.find('.card-img'),
+      slideInImg = slideIn.find('.card-img'),
+      index = slideIn.index(),
+      size = $homeSlide.length;
+
+    if (slideIn.length !== 0) {
+      t1
+        .set(slideIn, {
+          autoAlpha: 1,
+          className: '+=active'
+        })
+        .set(slideOut, {
+          className: '-=active'
+        })
+        .to(slideOutContent, 0.65, {
+          y: "-=40px",
+          ease: Power3.easeInOut
+        }, 0)
+        .to(slideOutImg, 0.65, {
+          backgroundPosition: 'top',
+          ease: Power3.easeInOut
+        }, 0)
+        .to(slideInAll, 1, {
+          y: "+=100%",
+          ease: Power3.easeInOut
+        }, 0)
+        .fromTo(slideInContent, 0.65, {
+          y: '+=40px'
+        }, {
+          y: 0,
+          ease: Power3.easeInOut
+        }, "-=0.7")
+        .fromTo(slideInImg, 0.65, {
+          backgroundPosition: 'bottom'
+        }, {
+          backgroundPosition: 'top',
+          ease: Power3.easeInOut
+        }, '-=0.7')
+    }
+
+    TweenMax.set($slideNavNext, {
+      autoAlpha: 1
+    });
+
+    if (index === size - 2) {
+      TweenMax.to($slideNavPrev, 0.3, {
+        autoAlpha: 0.2,
+        ease: Linear.easeInOut
+      });
+
+    }
+  };
+
+  $slideNavPrev.click(function (e) {
+    e.preventDefault();
+
+    var slideOut = $('.slide.active'),
+      slideIn = $('.slide.active').prev('.slide'),
+      slideInAll = $('.slide');
+
+    goToPrevSlide(slideOut, slideIn, slideInAll);
+
+  });
+</script>
+  </body>
+
+</html>
